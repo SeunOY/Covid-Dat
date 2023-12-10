@@ -73,7 +73,7 @@ from contotal
 group by continent 
 
 
------ statement to query total country population by querying max running population gouped by location and continent
+----- statement to query total country population by querying max running population grouped by location and continent
 with contotal  (continent, location, population, conruntotal) 
 as 
 
@@ -85,5 +85,37 @@ group by location)
 select continent, max(conruntotal) as TotalPopulation
 from  contotal 
 group by continent 
+
+
+-- Population Percentage Vaccinated in Each Continent
+ 
+ with TotalConVac (date, continent, location, new_vaccinations, TotalVac)
+ as 
+ (
+select date, continent, location, new_vaccinations, sum(new_vaccinations) over (PARTITION by continent order by location, date) as TotalVac
+from CovidVaccine
+where continent not null
+and new_vaccinations not null
+order by continent
+),
+
+contotal  (continent, location, population, conruntotal) 
+as 
+(select continent, location, population, sum(population) over(partition by continent order by  location) as conruntotal
+from CovidDeaths
+where continent not NULL
+group by location)
+
+select TotalConVac.continent, max(conruntotal) as Population , max(TotalVac) as Vaccination,   max(TotalVac)/max(conruntotal)*100 as Percentage_Vaccinated
+from  contotal 
+join TotalConVac
+on contotal.continent = TotalConVac.continent 
+group by contotal.continent
+ 
+
+
+
+
+
 
 

@@ -19,47 +19,74 @@ and new_cases is not null
 group by d.location 
 order by new_cases asc
  
-/*Country Infection rate limit 100
+/*Infection Rate Per Country (Top 100)
 */
-select location, total_cases,new_cases, sum(new_cases) as CountryCase, population, sum(new_cases)/population *100 as InfectionRate
-from CovidDeaths
-where continent is not null
-group by location
-limit 100
 
-
-/*Country Death rate in descending order ( limit 100)
-*/
-select location, total_deaths, sum(new_deaths) as CountryDeathCount, population, sum(new_deaths) /population as DeathRate
-from CovidDeaths
-where continent is not NULL
-and total_deaths is not null 
-and new_deaths is not null
-group by location
-order by DeathRate desc
-limit 100
-
-/*Country Vaccination Efficacy
-*/
-select d.location, sum( new_vaccinations), sum(new_deaths) /sum(new_vaccinations)as VaccinationEfficacy
+select d.location, sum(new_cases) as CountryCase, d.population, sum(new_cases)/d.population *100 as InfectionRate
 from CovidDeaths d
-join CovidVaccine v
-on d.location = v.location 
-where d.continent is not NULL
-and total_deaths is not null 
-and new_deaths is not null
-and new_vaccinations is not null
+join Covidvaccine v
+on d.location=v.location 
+and d.date = v.date 
+where d.continent is not null
 group by d.location
+limit 100
+
+
+
+
+/*Countries that had the highest date rate compare to total population (desc order, top 100)
+*/
+
+select d.location, d.population, sum(new_deaths) as Totaldeath, sum(new_deaths)/population * 100 as DeathRate
+from CovidDeaths d
+join Covidvaccine v
+on d.location=v.location 
+and d.date = v.date 
+where d.continent is not NULL
+group by d.location
+order by DeathRate desc
+
+
+-- correctly breaks down running total of total continent population by partitioning by continent and ordering by location
+
+ select continent, location, population, sum(population) over(partition by continent order by  location)
+from CovidDeaths
+where continent not NULL
+group by location
+order by continent, location
+
+
+
+--- Continent Running Total: To get a table providing the total population in a continent, a query was done with the CTE to give running total per ordered by location and that was queried 
+--to provide maximum running population
+
+with contotal  (continent, location, population, conruntotal) 
+as 
+
+(select continent, location, population, sum(population) over(partition by continent order by  location) as conruntotal
+from CovidDeaths
+where continent not NULL
+group by location)
+
+select continent, max(conruntotal)
+from contotal 
+group by continent 
 
 
 
 
 
+----- statement to query total country population by querying max running population gouped by location and continent
+with contotal  (continent, location, population, conruntotal) 
+as 
 
+(select continent, location, population, sum(population) over(partition by continent order by  location) as conruntotal
+from CovidDeaths
+where continent not NULL
+group by location)
 
-
-
-
-
+select continent, max(conruntotal) as TotalPopulation
+from  contotal 
+group by continent 
 
 

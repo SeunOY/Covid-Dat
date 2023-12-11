@@ -87,7 +87,7 @@ from  contotal
 group by continent 
 
 
--- Population Percentage Vaccinated in Each Continent
+-- Population Percentage Vaccinated in Each Continent Using CTEs, Running Totals & Joins
  
  with TotalConVac (date, continent, location, new_vaccinations, TotalVac)
  as 
@@ -113,7 +113,30 @@ on contotal.continent = TotalConVac.continent
 group by contotal.continent
  
 
+----Percentage Population Infected In Whole continent using CTEs & Running Totals, Joins
 
+with TotalConCase (date, continent, location, new_cases,  TotalCase)
+ as 
+ (
+select date, continent, location, new_cases, sum(new_cases) over (PARTITION by continent order by location, date) as TotalCase
+from CovidDeaths
+where continent not null
+and new_cases not null
+order by continent),
+
+contotal  (continent, location, population, conruntotal) 
+as 
+(select continent, location, population, sum(population) over(partition by continent order by  location) as conruntotal
+from CovidDeaths
+where continent not NULL
+group by location)
+
+select TotalConCase.continent, max(conruntotal) Population,  max(totalcase) as Infection,  max(totalcase) / max(conruntotal)  * 100 as ContinentInfectionRate
+from  contotal 
+join TotalConCase 
+on contotal.continent = TotalConCase .continent 
+group by contotal.continent
+ 
 
 
 

@@ -17,51 +17,17 @@ Number of people vaccinated/vaccinated percentage in each continent
 Number of people vaccinated/vaccinated percentage in each continent 
 
 
-What was the highest record for new COVID-19 cases in each country? The highest daily record for each country was determined with the query below. As each daily record was entered with the same population for each country, grouping on location was done to ensure that the result populated data for each country.
-
-
-
-
-The Infection rate per country was determined by running the query below
-
-
-The death rate for each country was determined with the query below:
-
-
-
-
-The vaccinated population in each country was determined by running queries on joined CovidDeaths & CovidVaccinattions table
-
-
-
-The percentage infected in each continent was determined by joining 2 Common Table Expressions (CTE) to determine the total cases in each continent and the total population in each continent. A join was created to query the 2 CTEs and determine the max running total for COVID cases and population of each continent and calculations were performed on them to determine the percentage population infected in each continent.  The query can be seen below.
-
-
-
-
-
-	2.
-
-
-
-A similar query was done to populate the total vaccinated population of each continent but by querying the running total of the new vaccination field in the Covid Vaccine Table and the new_cases field in the Covid Deaths Table.
-
- 
-
-
-
-
 
 Key insights from the data are provided below. A more interactive visualisation of these insights can be found [here](https://public.tableau.com/shared/9P83FDBTD?:display_count=n&:origin=viz_share_link)
 
 
-America had the highest vaccination rate with 44% of its population vaccinated till present
+1. America had the highest vaccination rate with 44% of its population vaccinated till present
 
-The highest number of infections compared to the total population is observed in Andorra with a population of 77,265%  and an infection rate of 17.1255%.
+2. The highest number of infections compared to the total population is observed in Andorra with a population of 77,265%  and an infection rate of 17.1255%.
 
-Israel, UAE & Chile had the highest vaccination rates at 121.278%, 95.799%, 77.248% respectively while countries like Algeria, Cameroon, and Myanmar had vaccination rates that were close to zero and almost negligible 
+3. Israel, UAE & Chile had the highest vaccination rates at 121.278%, 95.799%, 77.248% respectively while countries like Algeria, Cameroon, and Myanmar had vaccination rates that were close to zero and almost negligible 
 
-Hungary, Czechia, and San Marino had the highest death rate with records of 0.28%, 0.27%, 0.27% compared to countries with larger populations like China, India & United States with death rates of 0.000335%, 0.015352%, 0.174087%.
+4. Hungary, Czechia, and San Marino had the highest death rate with records of 0.28%, 0.27%, 0.27% compared to countries with larger populations like China, India & United States with death rates of 0.000335%, 0.015352%, 0.174087%.
  
 
 

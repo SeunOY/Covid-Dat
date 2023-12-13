@@ -52,7 +52,7 @@ A similar query was done to populate the total vaccinated population of each con
 
 
 
-Key insights from the data are provided below. A more interactive visualisation of these insights can be found here.
+Key insights from the data are provided below. A more interactive visualisation of these insights can be found [here](https://public.tableau.com/shared/9P83FDBTD?:display_count=n&:origin=viz_share_link)
 
 
 America had the highest vaccination rate with 44% of its population vaccinated till present
